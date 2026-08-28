@@ -191,9 +191,10 @@ export const maquinasPesadas: Course = {
   ],
   investimento: {
     intro:
-      'As 5 máquinas no mesmo curso, com material, horas de prática e certificado. Sem taxa escondida.',
-    preco: '12x de R$ 189,00',
-    precoDetalhe: PRECO_DETALHE,
+      'Curso de 2 máquinas, com material, horas de prática e certificado. Sem taxa escondida.',
+    preco: '3x de R$ 370,00',
+    precoDetalhe:
+      'ou R$ 990,00 à vista · valor para 2 máquinas. Consulte o valor para as 5 máquinas no WhatsApp.',
   },
   testimonials: [
     {
