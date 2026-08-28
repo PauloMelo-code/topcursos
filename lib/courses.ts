@@ -351,8 +351,8 @@ export const empilhadeira: Course = {
   ],
   investimento: {
     intro: 'Tudo incluso: material, horas de prática e certificado. Sem taxa escondida.',
-    preco: '12x de R$ 135,00',
-    precoDetalhe: PRECO_DETALHE,
+    preco: '3x de R$ 265,00',
+    precoDetalhe: 'de R$ 1.350,00 por R$ 675,00 à vista',
   },
   testimonials: [
     {
