@@ -56,35 +56,48 @@ export function Contagem({ bf, compacta = false }: { bf: BlackFriday; compacta?:
       <span
         className="contagem-rotulo"
         style={{
-          font: `700 ${compacta ? 12 : 13}px 'Barlow',sans-serif`,
-          letterSpacing: compacta ? 1 : 1.5,
+          font: `700 ${compacta ? 12 : 15}px 'Barlow',sans-serif`,
+          letterSpacing: compacta ? 1 : 2,
           whiteSpace: 'nowrap',
           textTransform: 'uppercase',
-          color: '#D4D4D8',
+          color: compacta ? '#D4D4D8' : '#fff',
         }}
       >
         {rotulo}
       </span>
-      <div aria-hidden="true" style={{ display: 'flex', gap: compacta ? 4 : 8 }}>
+      <div aria-hidden="true" className="contagem-blocos" style={{ display: 'flex', gap: compacta ? 4 : 10 }}>
         {blocos.map(([valor, unidade]) => (
           <span
             key={unidade}
             className="contagem-box"
             style={{
               display: 'inline-flex',
-              alignItems: 'baseline',
-              gap: 2,
-              background: '#16171B',
-              border: '1px solid #2A2B31',
-              borderRadius: 8,
-              padding: compacta ? '3px 7px' : '8px 12px',
+              flexDirection: compacta ? 'row' : 'column',
+              alignItems: compacta ? 'baseline' : 'center',
+              gap: compacta ? 2 : 6,
+              background: compacta ? '#16171B' : 'linear-gradient(180deg,#1C1D22,#111114)',
+              border: compacta ? '1px solid #2A2B31' : '1.5px solid rgba(255,184,0,.45)',
+              borderRadius: compacta ? 8 : 14,
+              padding: compacta ? '3px 7px' : '14px 10px 12px',
+              minWidth: compacta ? undefined : 92,
+              boxShadow: compacta ? undefined : '0 0 24px rgba(255,184,0,.12)',
               fontVariantNumeric: 'tabular-nums',
             }}
           >
-            <strong style={{ font: `800 ${compacta ? 17 : 28}px/1 'Barlow Condensed',sans-serif`, color: AMARELO }}>
+            <strong style={{ font: `800 ${compacta ? 17 : 56}px/1 'Barlow Condensed',sans-serif`, color: AMARELO }}>
               {valor}
             </strong>
-            <small style={{ fontSize: compacta ? 11 : 12, color: '#A1A1AA', fontWeight: 600 }}>{unidade}</small>
+            <small
+              style={{
+                fontSize: compacta ? 11 : 13,
+                color: '#A1A1AA',
+                fontWeight: 700,
+                textTransform: compacta ? undefined : 'uppercase',
+                letterSpacing: compacta ? undefined : 1,
+              }}
+            >
+              {unidade}
+            </small>
           </span>
         ))}
       </div>

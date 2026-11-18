@@ -576,11 +576,25 @@ section[id] {
     flex-direction: column;
     gap: 8px !important;
   }
+  /* Relógio grande: 4 blocos dividindo a largura toda do card. */
+  .card-oferta .contagem {
+    width: 100%;
+  }
+  .contagem:not(.contagem-compacta) .contagem-blocos {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px !important;
+    width: 100%;
+  }
   .contagem:not(.contagem-compacta) .contagem-box {
-    padding: 8px 10px !important;
+    min-width: 0 !important;
+    padding: 12px 4px 10px !important;
   }
   .contagem:not(.contagem-compacta) .contagem-box strong {
-    font-size: 24px !important;
+    font-size: 44px !important;
+  }
+  .contagem:not(.contagem-compacta) .contagem-box small {
+    font-size: 11px !important;
   }
   .lote {
     padding: 12px 14px !important;
