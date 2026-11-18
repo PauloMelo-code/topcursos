@@ -338,18 +338,18 @@ export default function CoursePage({ course }: { course: Course }) {
       </section>
 
       {/* MERCADO DE TRABALHO */}
-      <section style={{ padding: '72px 20px', background: 'var(--dark)', color: '#ffffff' }}>
+      <section className="secao-mercado" style={{ padding: '80px 20px', color: '#ffffff' }}>
         <div
           style={{
             maxWidth: 1140,
             margin: '0 auto',
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))',
-            gap: 44,
+            gap: 48,
             alignItems: 'center',
           }}
         >
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
             <h2
               style={{
                 margin: 0,
@@ -372,53 +372,71 @@ export default function CoursePage({ course }: { course: Course }) {
               <span style={{ color: '#FFB800' }}>{course.market.titleHighlight}</span>
               {course.market.titlePost}
             </h2>
-            <p style={{ margin: 0, color: '#C9D2E0', fontSize: 17, lineHeight: 1.6 }}>
+            <p style={{ margin: 0, color: 'rgba(255,255,255,.75)', fontSize: 17, lineHeight: 1.6, maxWidth: 520 }}>
               {course.market.paragraph}
             </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginTop: 6 }}>
-              {course.market.sectors.map((s) => (
-                <span
-                  key={s}
-                  style={{
-                    background: 'rgba(255,255,255,.08)',
-                    border: '1px solid rgba(255,255,255,.18)',
-                    borderRadius: 999,
-                    padding: '8px 16px',
-                    fontSize: 14,
-                    fontWeight: 600,
-                  }}
-                >
-                  {s}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-            {course.market.stats.map((stat) => (
-              <div
-                key={stat.value}
+            <div style={{ marginTop: 10 }}>
+              <span
                 style={{
-                  background: 'var(--dark-card)',
-                  borderRadius: 14,
-                  padding: 24,
                   display: 'flex',
-                  flexDirection: 'column',
-                  gap: 6,
-                  gridColumn: stat.wide ? '1 / -1' : undefined,
+                  alignItems: 'center',
+                  gap: 8,
+                  font: "700 12px 'Barlow',sans-serif",
+                  letterSpacing: 1.5,
+                  textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,.6)',
+                  marginBottom: 12,
                 }}
               >
-                <span
-                  style={{
-                    font: `800 ${stat.size ?? 30}px 'Barlow Condensed',sans-serif`,
-                    color: '#FFB800',
-                  }}
-                >
-                  {stat.value}
+                <span style={{ color: '#FFB800', display: 'flex' }}>
+                  <LearnIcon name="map-pin" />
                 </span>
-                <span style={{ color: '#C9D2E0', fontSize: 14, lineHeight: 1.4 }}>{stat.label}</span>
-              </div>
-            ))}
+                Onde você pode trabalhar
+              </span>
+              <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+                {course.market.sectors.map((s) => (
+                  <li key={s} className="chip-setor">
+                    {s}
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
+
+          {(() => {
+            const [destaque, ...outros] = course.market.stats;
+            return (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                <div className="stat-destaque">
+                  <span className="stat-icone">
+                    <LearnIcon name={destaque.icon} />
+                  </span>
+                  <span
+                    style={{
+                      font: "800 clamp(38px,4.6vw,54px)/1 'Barlow Condensed',sans-serif",
+                      color: '#FFB800',
+                    }}
+                  >
+                    {destaque.value}
+                  </span>
+                  <span style={{ color: 'rgba(255,255,255,.8)', fontSize: 16, lineHeight: 1.5 }}>{destaque.label}</span>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: 16 }}>
+                  {outros.map((stat) => (
+                    <div key={stat.value} className="stat-card">
+                      <span className="stat-icone stat-icone-sm">
+                        <LearnIcon name={stat.icon} />
+                      </span>
+                      <span style={{ font: "800 26px/1.1 'Barlow Condensed',sans-serif", textTransform: 'uppercase' }}>
+                        {stat.value}
+                      </span>
+                      <span style={{ color: 'rgba(255,255,255,.7)', fontSize: 14, lineHeight: 1.5 }}>{stat.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </section>
 

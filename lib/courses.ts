@@ -18,12 +18,9 @@ export interface LearnCard {
 }
 
 export interface StatCard {
+  icon: IconKey;
   value: string;
   label: string;
-  /** Tamanho da fonte do número (px). Padrão 30. */
-  size?: number;
-  /** Ocupa as duas colunas do grid. */
-  wide?: boolean;
 }
 
 export interface StepCard {
@@ -192,20 +189,20 @@ export const maquinasPesadas: Course = {
     ],
     stats: [
       {
+        icon: 'cash',
         value: 'R$ 2.800 a R$ 5.000',
         label: 'média para operadores, fora diárias, adicionais e horas extras',
       },
       {
+        icon: 'backhoe',
         value: '4 máquinas',
         label: 'um só curso, quatro portas de entrada no mercado',
-        size: 34,
       },
       {
+        icon: 'user-search',
         value: 'Falta de operadores',
         label:
           'construtoras e empresas de terraplenagem relatam escassez de operadores certificados na região',
-        size: 34,
-        wide: true,
       },
     ],
   },
@@ -386,20 +383,20 @@ export const empilhadeira: Course = {
     ],
     stats: [
       {
+        icon: 'cash',
         value: 'R$ 2.200 a R$ 3.800',
         label: 'média para operadores, fora adicionais e horas extras',
       },
       {
+        icon: 'trending-up',
         value: 'Alta demanda',
         label: 'vagas constantes em centros de distribuição da região',
-        size: 34,
       },
       {
+        icon: 'certificate',
         value: 'Certificação obrigatória',
         label:
           'a NR-11 exige treinamento para operar empilhadeira. Sem certificado, a empresa nem pode contratar',
-        size: 34,
-        wide: true,
       },
     ],
   },
@@ -569,18 +566,20 @@ export const motoniveladora: Course = {
     ],
     stats: [
       {
+        icon: 'cash',
         value: 'R$ 3.500 a R$ 6.000',
         label: 'média para patroleiros experientes, fora diárias e horas extras',
       },
       {
+        icon: 'user-search',
         value: 'Profissão escassa',
         label: 'poucos operadores dominam o nivelamento fino, e o mercado sabe disso',
       },
       {
+        icon: 'trending-up',
         value: 'Porta de entrada',
         label:
           'quem opera patrola assume as frentes de serviço mais importantes e negocia melhor o próprio salário',
-        wide: true,
       },
     ],
   },

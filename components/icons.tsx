@@ -80,6 +80,43 @@ const PATHS = {
       <path d="M19 17h-3" />
     </>
   ),
+  cash: (
+    <>
+      <path d="M7 9m0 2a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v6a2 2 0 0 1 -2 2h-10a2 2 0 0 1 -2 -2z" />
+      <path d="M14 14m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+      <path d="M17 9v-2a2 2 0 0 0 -2 -2h-10a2 2 0 0 0 -2 2v6a2 2 0 0 0 2 2h2" />
+    </>
+  ),
+  'trending-up': (
+    <>
+      <path d="M3 17l6 -6l4 4l8 -8" />
+      <path d="M14 7l7 0l0 7" />
+    </>
+  ),
+  certificate: (
+    <>
+      <path d="M15 15m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+      <path d="M13 17.5v4.5l2 -1.5l2 1.5v-4.5" />
+      <path d="M10 19h-5a2 2 0 0 1 -2 -2v-10c0 -1.1 .9 -2 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -1 1.73" />
+      <path d="M6 9l12 0" />
+      <path d="M6 12l3 0" />
+      <path d="M6 15l2 0" />
+    </>
+  ),
+  'user-search': (
+    <>
+      <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+      <path d="M6 21v-2a4 4 0 0 1 4 -4h1.5" />
+      <path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+      <path d="M20.2 20.2l1.8 1.8" />
+    </>
+  ),
+  'map-pin': (
+    <>
+      <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+      <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" />
+    </>
+  ),
 } satisfies Record<string, React.ReactNode>;
 
 export type IconKey = keyof typeof PATHS;
