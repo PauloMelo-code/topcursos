@@ -2,7 +2,10 @@
 
 import { useRef, useState } from 'react';
 import type { Course } from '@/lib/courses';
-import { WEBHOOK_URL, waLink } from '@/lib/config';
+import Image from 'next/image';
+import { waLink } from '@/lib/config';
+import { BarraBlackFriday, CardOferta, PrecoHero, SeloBlackFriday, useOfertaAtiva } from './BlackFriday';
+import InscricaoForm from './InscricaoForm';
 import {
   CredIcon,
   FacebookIcon,
@@ -15,26 +18,9 @@ import {
 
 const STRIPES = 'repeating-linear-gradient(-45deg,#FFB800 0 16px,#16181D 16px 32px)';
 
-type Errors = Partial<Record<'nome' | 'whats' | 'email' | 'cidade', string>>;
-
-function maskPhone(v: string): string {
-  const d = v.replace(/\D/g, '').slice(0, 11);
-  if (d.length <= 2) return d;
-  if (d.length <= 6) return '(' + d.slice(0, 2) + ') ' + d.slice(2);
-  if (d.length <= 10) return '(' + d.slice(0, 2) + ') ' + d.slice(2, 6) + '-' + d.slice(6);
-  return '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7);
-}
-
 export default function CoursePage({ course }: { course: Course }) {
   const formRef = useRef<HTMLElement>(null);
 
-  const [nome, setNome] = useState('');
-  const [whats, setWhats] = useState('');
-  const [email, setEmail] = useState('');
-  const [cidade, setCidade] = useState('');
-  const [errors, setErrors] = useState<Errors>({});
-  const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
   const [openFaq, setOpenFaq] = useState(-1);
 
   const waInfo = waLink(
@@ -51,86 +37,24 @@ export default function CoursePage({ course }: { course: Course }) {
     }
   }
 
-  function validate(): Errors {
-    const e: Errors = {};
-    if (nome.trim().length < 3) e.nome = 'Informe seu nome completo.';
-    if (whats.replace(/\D/g, '').length < 10) e.whats = 'Informe um WhatsApp válido com DDD.';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) e.email = 'Informe um e-mail válido.';
-    if (cidade.trim().length < 2) e.cidade = 'Informe sua cidade.';
-    return e;
-  }
-
-  async function submit(ev: React.FormEvent) {
-    ev.preventDefault();
-    const errs = validate();
-    if (Object.keys(errs).length) {
-      setErrors(errs);
-      return;
-    }
-    setErrors({});
-    setSending(true);
-
-    if (WEBHOOK_URL) {
-      try {
-        await fetch(WEBHOOK_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            nome,
-            whatsapp: whats,
-            email,
-            cidade,
-            curso: course.courseName,
-            origem: typeof location !== 'undefined' ? location.href : '',
-            data: new Date().toISOString(),
-          }),
-          keepalive: true,
-        });
-      } catch {
-        /* falha do webhook não bloqueia o lead */
-      }
-    }
-
-    const msg =
-      'Olá! Meu nome é ' +
-      nome +
-      ', sou de ' +
-      cidade +
-      ' e tenho interesse no ' +
-      course.courseName +
-      '. Meu e-mail é ' +
-      email +
-      '.';
-    window.open(waLink(msg), '_blank');
-    setSending(false);
-    setSent(true);
-  }
-
-  const inputStyle: React.CSSProperties = {
-    border: '1.5px solid #D4DAE2',
-    borderRadius: 10,
-    padding: '13px 14px',
-    font: "400 16px 'Barlow',sans-serif",
-    outline: 'none',
-  };
-  const errStyle: React.CSSProperties = {
-    color: '#D3382E',
-    fontSize: 13,
-    fontWeight: 600,
-    minHeight: 18,
-  };
-  const labelStyle: React.CSSProperties = { fontWeight: 600, fontSize: 14 };
+  // Black Friday: tema escuro + contagem enquanto a oferta estiver no prazo.
+  const bf = course.blackFriday;
+  const bfOn = useOfertaAtiva(bf) && bf ? bf : null;
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {/* FAIXA DE SEGURANÇA */}
-      <div style={{ height: 8, background: STRIPES }} />
+    <div
+      className="tema"
+      data-bf={bfOn ? '' : undefined}
+      style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--bg)', color: 'var(--fg)' }}
+    >
+      {/* FAIXA DE SEGURANÇA (ou barra da Black Friday) */}
+      {bfOn ? <BarraBlackFriday bf={bfOn} onCta={scrollToForm} /> : <div style={{ height: 8, background: STRIPES }} />}
 
       {/* HEADER */}
       <header
         style={{
-          background: '#ffffff',
-          borderBottom: '1px solid #E6E9EE',
+          background: 'var(--header-bg)',
+          borderBottom: '1px solid var(--border)',
           position: 'sticky',
           top: 0,
           zIndex: 50,
@@ -151,7 +75,11 @@ export default function CoursePage({ course }: { course: Course }) {
           <img
             src="/assets/logo-instituto-top.png"
             alt="Instituto Top, Treinamentos e Qualificação"
-            style={{ height: 64, width: 'auto' }}
+            style={
+              bfOn
+                ? { height: 58, width: 58, objectFit: 'contain', background: '#fff', borderRadius: '50%', padding: 3 }
+                : { height: 64, width: 'auto' }
+            }
           />
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <button
@@ -177,7 +105,9 @@ export default function CoursePage({ course }: { course: Course }) {
       {/* HERO */}
       <section
         style={{
-          background: 'linear-gradient(135deg,#12141A 0%,#1C2230 60%,#1B4B9B 140%)',
+          background: bfOn
+            ? 'radial-gradient(60% 70% at 85% 15%,rgba(255,184,0,.16),transparent 60%),radial-gradient(50% 60% at 0% 100%,rgba(27,75,155,.35),transparent 60%),#050505'
+            : 'linear-gradient(135deg,#12141A 0%,#1C2230 60%,#1B4B9B 140%)',
           color: '#ffffff',
           padding: '56px 20px 64px',
         }}
@@ -193,6 +123,11 @@ export default function CoursePage({ course }: { course: Course }) {
           }}
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            {bfOn ? (
+              <div>
+                <SeloBlackFriday bf={bfOn} grande />
+              </div>
+            ) : (
             <span
               style={{
                 alignSelf: 'flex-start',
@@ -208,6 +143,7 @@ export default function CoursePage({ course }: { course: Course }) {
             >
               {course.hero.badge}
             </span>
+            )}
             <h1
               style={{
                 margin: 0,
@@ -252,6 +188,8 @@ export default function CoursePage({ course }: { course: Course }) {
               </div>
             )}
 
+            {bfOn && <PrecoHero bf={bfOn} />}
+
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 6 }}>
               <button
                 onClick={scrollToForm}
@@ -267,7 +205,7 @@ export default function CoursePage({ course }: { course: Course }) {
                   minHeight: 48,
                 }}
               >
-                Quero me inscrever
+                {bfOn ? 'Garantir meu desconto' : 'Quero me inscrever'}
               </button>
               <a
                 href={waInfo}
@@ -306,7 +244,9 @@ export default function CoursePage({ course }: { course: Course }) {
                   height: 380,
                   objectFit: 'cover',
                   borderRadius: 16,
-                  boxShadow: '0 20px 50px rgba(0,0,0,.4)',
+                  boxShadow: bfOn
+                    ? '0 0 0 2px rgba(255,184,0,.6), 0 20px 60px rgba(255,184,0,.12)'
+                    : '0 20px 50px rgba(0,0,0,.4)',
                 }}
               />
             ) : (
@@ -362,7 +302,7 @@ export default function CoursePage({ course }: { course: Course }) {
       </section>
 
       {/* O QUE VOCÊ VAI APRENDER */}
-      <section style={{ padding: '72px 20px', background: '#ffffff' }}>
+      <section style={{ padding: '72px 20px', background: 'var(--bg)' }}>
         <div style={{ maxWidth: 1140, margin: '0 auto' }}>
           <h2
             style={{
@@ -376,7 +316,7 @@ export default function CoursePage({ course }: { course: Course }) {
                 display: 'block',
                 font: "700 13px 'Barlow',sans-serif",
                 letterSpacing: '2.5px',
-                color: '#1B4B9B',
+                color: 'var(--kicker)',
                 marginBottom: 10,
               }}
             >
@@ -384,7 +324,7 @@ export default function CoursePage({ course }: { course: Course }) {
             </span>
             O que você vai aprender
           </h2>
-          <p style={{ margin: '0 0 36px', color: '#5B6472', fontSize: 17, maxWidth: 640 }}>
+          <p style={{ margin: '0 0 36px', color: 'var(--muted)', fontSize: 17, maxWidth: 640 }}>
             {course.learn.intro}
           </p>
           <div
@@ -398,7 +338,7 @@ export default function CoursePage({ course }: { course: Course }) {
               <div
                 key={card.title}
                 style={{
-                  background: '#F3F5F8',
+                  background: 'var(--card)',
                   borderRadius: 14,
                   padding: 26,
                   display: 'flex',
@@ -420,7 +360,7 @@ export default function CoursePage({ course }: { course: Course }) {
                   <LearnIcon name={card.icon} />
                 </span>
                 <h3 style={{ margin: 0, font: "700 20px 'Barlow',sans-serif" }}>{card.title}</h3>
-                <p style={{ margin: 0, color: '#5B6472', lineHeight: 1.55 }}>{card.text}</p>
+                <p style={{ margin: 0, color: 'var(--muted)', lineHeight: 1.55 }}>{card.text}</p>
               </div>
             ))}
           </div>
@@ -428,7 +368,7 @@ export default function CoursePage({ course }: { course: Course }) {
       </section>
 
       {/* MERCADO DE TRABALHO */}
-      <section style={{ padding: '72px 20px', background: '#16181D', color: '#ffffff' }}>
+      <section style={{ padding: '72px 20px', background: 'var(--dark)', color: '#ffffff' }}>
         <div
           style={{
             maxWidth: 1140,
@@ -488,7 +428,7 @@ export default function CoursePage({ course }: { course: Course }) {
               <div
                 key={stat.value}
                 style={{
-                  background: '#1C2230',
+                  background: 'var(--dark-card)',
                   borderRadius: 14,
                   padding: 24,
                   display: 'flex',
@@ -513,7 +453,7 @@ export default function CoursePage({ course }: { course: Course }) {
       </section>
 
       {/* COMO FUNCIONA */}
-      <section style={{ padding: '72px 20px', background: '#F3F5F8' }}>
+      <section style={{ padding: '72px 20px', background: 'var(--bg-alt)' }}>
         <div style={{ maxWidth: 1140, margin: '0 auto' }}>
           <h2
             style={{
@@ -527,7 +467,7 @@ export default function CoursePage({ course }: { course: Course }) {
                 display: 'block',
                 font: "700 13px 'Barlow',sans-serif",
                 letterSpacing: '2.5px',
-                color: '#1B4B9B',
+                color: 'var(--kicker)',
                 marginBottom: 10,
               }}
             >
@@ -546,7 +486,7 @@ export default function CoursePage({ course }: { course: Course }) {
               <div
                 key={step.label}
                 style={{
-                  background: '#ffffff',
+                  background: 'var(--card-alt)',
                   borderRadius: 14,
                   padding: 26,
                   borderTop: '4px solid #FFB800',
@@ -560,13 +500,13 @@ export default function CoursePage({ course }: { course: Course }) {
                     font: "700 13px 'Barlow',sans-serif",
                     letterSpacing: 1,
                     textTransform: 'uppercase',
-                    color: '#1B4B9B',
+                    color: 'var(--kicker)',
                   }}
                 >
                   {step.label}
                 </span>
                 <span style={{ font: "800 30px 'Barlow Condensed',sans-serif" }}>{step.value}</span>
-                <p style={{ margin: 0, color: '#5B6472', lineHeight: 1.5 }}>{step.desc}</p>
+                <p style={{ margin: 0, color: 'var(--muted)', lineHeight: 1.5 }}>{step.desc}</p>
               </div>
             ))}
           </div>
@@ -574,13 +514,16 @@ export default function CoursePage({ course }: { course: Course }) {
       </section>
 
       {/* INVESTIMENTO */}
-      <section style={{ padding: '72px 20px', background: '#ffffff' }}>
+      <section style={{ padding: '72px 20px', background: 'var(--bg)' }}>
+        {bfOn ? (
+          <CardOferta bf={bfOn} onCta={scrollToForm} />
+        ) : (
         <div
           style={{
             maxWidth: 760,
             margin: '0 auto',
             textAlign: 'center',
-            background: '#16181D',
+            background: 'var(--dark)',
             color: '#ffffff',
             borderRadius: 20,
             padding: '44px 28px',
@@ -628,10 +571,54 @@ export default function CoursePage({ course }: { course: Course }) {
             Garantir minha vaga
           </button>
         </div>
+        )}
       </section>
 
+      {/* GALERIA: fotos reais das turmas */}
+      {course.galeria && (
+        <section style={{ padding: '72px 20px', background: 'var(--dark)', color: '#ffffff' }}>
+          <div style={{ maxWidth: 1140, margin: '0 auto' }}>
+            <h2
+              style={{
+                margin: '0 0 36px',
+                font: "800 clamp(30px,3.8vw,42px)/1.1 'Barlow Condensed',sans-serif",
+                textTransform: 'uppercase',
+              }}
+            >
+              <span
+                style={{
+                  display: 'block',
+                  font: "700 13px 'Barlow',sans-serif",
+                  letterSpacing: '2.5px',
+                  color: '#FFB800',
+                  marginBottom: 10,
+                }}
+              >
+                {course.galeria.kicker}
+              </span>
+              {course.galeria.titulo}
+            </h2>
+            {/* Linhas justificadas: cada foto cresce na proporção dela, sem cortar. */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+              {course.galeria.fotos.map((foto) => (
+                <div key={foto.src} style={{ flex: `${foto.w / foto.h} 1 ${(foto.w / foto.h) * 200}px` }}>
+                  <Image
+                    src={foto.src}
+                    alt={foto.alt}
+                    width={foto.w}
+                    height={foto.h}
+                    sizes="(max-width: 600px) 100vw, 50vw"
+                    style={{ display: 'block', width: '100%', height: 'auto', borderRadius: 12 }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* DEPOIMENTOS */}
-      <section style={{ padding: '72px 20px', background: '#F3F5F8' }}>
+      <section style={{ padding: '72px 20px', background: 'var(--bg-alt)' }}>
         <div style={{ maxWidth: 1140, margin: '0 auto' }}>
           <h2
             style={{
@@ -645,7 +632,7 @@ export default function CoursePage({ course }: { course: Course }) {
                 display: 'block',
                 font: "700 13px 'Barlow',sans-serif",
                 letterSpacing: '2.5px',
-                color: '#1B4B9B',
+                color: 'var(--kicker)',
                 marginBottom: 10,
               }}
             >
@@ -664,7 +651,7 @@ export default function CoursePage({ course }: { course: Course }) {
               <div
                 key={t.name}
                 style={{
-                  background: '#ffffff',
+                  background: 'var(--card-alt)',
                   borderRadius: 14,
                   padding: 26,
                   display: 'flex',
@@ -678,7 +665,7 @@ export default function CoursePage({ course }: { course: Course }) {
                 >
                   &ldquo;
                 </div>
-                <p style={{ margin: 0, color: '#39414D', fontSize: 16, lineHeight: 1.6 }}>{t.quote}</p>
+                <p style={{ margin: 0, color: 'var(--text-body)', fontSize: 16, lineHeight: 1.6 }}>{t.quote}</p>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 'auto' }}>
                   <div
                     aria-hidden="true"
@@ -687,11 +674,11 @@ export default function CoursePage({ course }: { course: Course }) {
                       height: 52,
                       flex: 'none',
                       borderRadius: '50%',
-                      background: '#E6E9EE',
+                      background: 'var(--avatar-bg)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: '#9AA3AF',
+                      color: 'var(--avatar-fg)',
                       font: "700 18px 'Barlow',sans-serif",
                     }}
                   >
@@ -699,7 +686,7 @@ export default function CoursePage({ course }: { course: Course }) {
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column' }}>
                     <strong style={{ fontSize: 15 }}>{t.name}</strong>
-                    <span style={{ color: '#5B6472', fontSize: 13 }}>{t.role}</span>
+                    <span style={{ color: 'var(--muted)', fontSize: 13 }}>{t.role}</span>
                   </div>
                 </div>
               </div>
@@ -709,7 +696,7 @@ export default function CoursePage({ course }: { course: Course }) {
       </section>
 
       {/* FAQ */}
-      <section style={{ padding: '72px 20px', background: '#ffffff' }}>
+      <section style={{ padding: '72px 20px', background: 'var(--bg)' }}>
         <div style={{ maxWidth: 760, margin: '0 auto' }}>
           <h2
             style={{
@@ -725,14 +712,14 @@ export default function CoursePage({ course }: { course: Course }) {
             {course.faqs.map((faq, i) => {
               const open = openFaq === i;
               return (
-                <div key={faq.q} style={{ border: '1px solid #E6E9EE', borderRadius: 12, overflow: 'hidden' }}>
+                <div key={faq.q} style={{ border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden' }}>
                   <button
                     onClick={() => setOpenFaq(open ? -1 : i)}
                     aria-expanded={open}
                     className="faq-q"
                     style={{
                       width: '100%',
-                      background: '#ffffff',
+                      background: 'var(--bg)',
                       border: 'none',
                       padding: '18px 20px',
                       display: 'flex',
@@ -742,17 +729,17 @@ export default function CoursePage({ course }: { course: Course }) {
                       cursor: 'pointer',
                       textAlign: 'left',
                       font: "700 16px 'Barlow',sans-serif",
-                      color: '#16181D',
+                      color: 'var(--fg)',
                       minHeight: 44,
                     }}
                   >
                     {faq.q}
-                    <span style={{ color: '#1B4B9B', font: "800 20px 'Barlow',sans-serif", flex: 'none' }}>
+                    <span style={{ color: 'var(--kicker)', font: "800 20px 'Barlow',sans-serif", flex: 'none' }}>
                       {open ? '−' : '+'}
                     </span>
                   </button>
                   {open && (
-                    <p style={{ margin: 0, padding: '0 20px 18px', color: '#5B6472', lineHeight: 1.6 }}>
+                    <p style={{ margin: 0, padding: '0 20px 18px', color: 'var(--muted)', lineHeight: 1.6 }}>
                       {faq.a}
                     </p>
                   )}
@@ -764,135 +751,12 @@ export default function CoursePage({ course }: { course: Course }) {
       </section>
 
       {/* FORMULÁRIO */}
-      <section
-        ref={formRef}
-        style={{ padding: '72px 20px', background: 'linear-gradient(135deg,#1B4B9B,#12315F)' }}
-      >
-        <div
-          style={{
-            maxWidth: 560,
-            margin: '0 auto',
-            background: '#ffffff',
-            borderRadius: 20,
-            padding: '36px 28px',
-            boxShadow: '0 20px 60px rgba(0,0,0,.3)',
-          }}
-        >
-          <h2
-            style={{
-              margin: '0 0 6px',
-              font: "800 clamp(28px,3.4vw,36px)/1.1 'Barlow Condensed',sans-serif",
-              textTransform: 'uppercase',
-              textAlign: 'center',
-            }}
-          >
-            Garanta sua vaga
-          </h2>
-          <p style={{ margin: '0 0 24px', color: '#5B6472', textAlign: 'center' }}>
-            Preencha e continue a inscrição pelo WhatsApp. Vagas limitadas por turma.
-          </p>
-          <form onSubmit={submit} noValidate style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-              <label htmlFor="f-nome" style={labelStyle}>
-                Nome completo
-              </label>
-              <input
-                id="f-nome"
-                type="text"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                placeholder="Seu nome"
-                className="input-field"
-                style={inputStyle}
-              />
-              <span style={errStyle}>{errors.nome || ''}</span>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-              <label htmlFor="f-whats" style={labelStyle}>
-                WhatsApp
-              </label>
-              <input
-                id="f-whats"
-                type="tel"
-                value={whats}
-                onChange={(e) => setWhats(maskPhone(e.target.value))}
-                placeholder="(51) 99999-9999"
-                className="input-field"
-                style={inputStyle}
-              />
-              <span style={errStyle}>{errors.whats || ''}</span>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-              <label htmlFor="f-email" style={labelStyle}>
-                E-mail
-              </label>
-              <input
-                id="f-email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="voce@email.com"
-                className="input-field"
-                style={inputStyle}
-              />
-              <span style={errStyle}>{errors.email || ''}</span>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-              <label htmlFor="f-cidade" style={labelStyle}>
-                Cidade
-              </label>
-              <input
-                id="f-cidade"
-                type="text"
-                value={cidade}
-                onChange={(e) => setCidade(e.target.value)}
-                placeholder="Sua cidade"
-                className="input-field"
-                style={inputStyle}
-              />
-              <span style={errStyle}>{errors.cidade || ''}</span>
-            </div>
-            <button
-              type="submit"
-              className="btn-yellow"
-              style={{
-                background: '#FFB800',
-                color: '#16181D',
-                border: 'none',
-                borderRadius: 10,
-                padding: 17,
-                font: "700 18px 'Barlow',sans-serif",
-                cursor: 'pointer',
-                marginTop: 6,
-                minHeight: 48,
-              }}
-            >
-              {sending ? 'Enviando…' : 'Garantir minha vaga'}
-            </button>
-            {sent && (
-              <p
-                style={{
-                  margin: 0,
-                  textAlign: 'center',
-                  color: '#1E8A4C',
-                  fontWeight: 600,
-                  background: '#E8F6EE',
-                  borderRadius: 10,
-                  padding: 12,
-                }}
-              >
-                Deu certo! Recebemos seus dados e a conversa continua no WhatsApp.
-              </p>
-            )}
-            <p style={{ margin: 0, textAlign: 'center', color: '#9AA3AF', fontSize: 12.5 }}>
-              Seus dados estão seguros e serão usados apenas para contato sobre o curso.
-            </p>
-          </form>
-        </div>
+      <section ref={formRef} style={{ padding: '72px 20px', background: 'var(--form-bg)' }}>
+        <InscricaoForm courseName={course.courseName} />
       </section>
 
       {/* RODAPÉ */}
-      <footer style={{ background: '#16181D', color: '#C9D2E0', padding: '56px 20px 90px' }}>
+      <footer style={{ background: 'var(--dark)', color: '#C9D2E0', padding: '56px 20px 90px' }}>
         <div
           style={{
             maxWidth: 1140,

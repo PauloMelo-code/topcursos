@@ -41,6 +41,44 @@ export interface Faq {
   a: string;
 }
 
+export interface Foto {
+  src: string;
+  alt: string;
+  /** Dimensões reais, para reservar espaço (sem salto de layout). */
+  w: number;
+  h: number;
+}
+
+export interface Lote {
+  label: string;
+  preco: string;
+  esgotado?: boolean;
+  nota?: string;
+}
+
+/**
+ * Oferta de Black Friday. Enquanto estiver no prazo, a página troca para o
+ * tema escuro e mostra contagem regressiva; depois de `fim` volta sozinha
+ * ao layout normal (nada a remover no dia seguinte).
+ */
+export interface BlackFriday {
+  /** Selo curto: "70% de desconto". */
+  selo: string;
+  /** Prazo em texto: "Somente neste feriado · 19/11". */
+  prazo: string;
+  /** ISO com fuso (-03:00). Antes dele a contagem mostra "Começa em". */
+  inicio?: string;
+  /** ISO com fuso (-03:00). Depois dele a oferta some. */
+  fim: string;
+  precoDe?: string;
+  precoPor: string;
+  precoNota: string;
+  /** Escada de lotes (o atual é o que não está esgotado). */
+  lotes?: Lote[];
+  /** O que está incluso, em lista de checagem. */
+  inclui: string[];
+}
+
 export interface Course {
   /** Segmento da rota ('' = página inicial). */
   slug: string;
@@ -73,6 +111,9 @@ export interface Course {
   investimento: { intro: string; preco: string; precoDetalhe: string };
   testimonials: Testimonial[];
   faqs: Faq[];
+  /** Fotos reais das turmas. */
+  galeria?: { kicker: string; titulo: string; fotos: Foto[] };
+  blackFriday?: BlackFriday;
 }
 
 const PRECO_DETALHE = 'ou à vista com desconto, consulte condições no WhatsApp';
@@ -83,21 +124,20 @@ export const maquinasPesadas: Course = {
   meta: {
     title: 'Curso de Operador de Máquinas Pesadas | Instituto Top',
     description:
-      'Aprenda a operar retroescavadeira, pá carregadeira, escavadeira hidráulica, motoniveladora e rolo compactador. Teoria online e prática de verdade em Santa Cruz do Sul. Certificado válido em todo o Brasil.',
+      'Aprenda a operar retroescavadeira, pá carregadeira, escavadeira hidráulica e bobcat (mini carregadeira). Teoria online e prática de verdade em Santa Cruz do Sul. Certificado válido em todo o Brasil.',
   },
   hero: {
-    badge: 'Formação em 5 máquinas · Turmas abertas em Santa Cruz do Sul',
+    badge: 'Formação em 4 máquinas · Turmas abertas em Santa Cruz do Sul',
     titlePre: 'Aprenda a operar as ',
-    titleHighlight: '5 máquinas',
+    titleHighlight: '4 máquinas',
     titlePost: ' que pagam os melhores salários da obra',
     paragraph:
-      'Retroescavadeira, pá carregadeira, escavadeira hidráulica, motoniveladora e rolo compactador. Teoria online no seu ritmo e horas de máquina de verdade no campo.',
+      'Retroescavadeira, pá carregadeira, escavadeira hidráulica e bobcat (mini carregadeira). Teoria online no seu ritmo e horas de máquina de verdade no campo.',
     chips: [
       'Retroescavadeira',
       'Pá carregadeira',
       'Escavadeira hidráulica',
-      'Motoniveladora',
-      'Rolo compactador',
+      'Bobcat (mini carregadeira)',
     ],
     image: { src: '/assets/maquinas-pesadas-hero.jpg', alt: 'Máquinas pesadas em operação' },
     imagePlaceholder: 'Foto: máquina pesada em operação',
@@ -106,16 +146,16 @@ export const maquinasPesadas: Course = {
     { icon: 'medal', text: 'Certificado válido em todo o Brasil' },
     { icon: 'shield-check', text: 'Treinamento conforme a NR-12' },
     { icon: 'user', text: 'Instrutores com anos de operação' },
-    { icon: 'truck', text: 'Prática em 5 máquinas' },
+    { icon: 'truck', text: 'Prática em 4 máquinas' },
   ],
   learn: {
     intro:
-      'Do primeiro comando à manobra fina. Você sai daqui operando as 5 máquinas.',
+      'Do primeiro comando à manobra fina. Você sai daqui operando as 4 máquinas.',
     cards: [
       {
         icon: 'shield',
         title: 'Operação segura',
-        text: 'Comandos, manobras, escavação, carregamento, nivelamento e compactação com técnica e segurança.',
+        text: 'Comandos, manobras, escavação e carregamento com técnica e segurança.',
       },
       {
         icon: 'clipboard',
@@ -130,7 +170,7 @@ export const maquinasPesadas: Course = {
       {
         icon: 'truck',
         title: 'Prática em campo',
-        text: 'Horas de máquina nas 5 categorias, com instrutor ao lado, simulando situações reais de obra.',
+        text: 'Horas de máquina nas 4 categorias, com instrutor ao lado, simulando situações reais de obra.',
       },
     ],
   },
@@ -154,8 +194,8 @@ export const maquinasPesadas: Course = {
         label: 'média para operadores, fora diárias, adicionais e horas extras',
       },
       {
-        value: '5 máquinas',
-        label: 'um só curso, cinco portas de entrada no mercado',
+        value: '4 máquinas',
+        label: 'um só curso, quatro portas de entrada no mercado',
         size: 34,
       },
       {
@@ -171,7 +211,7 @@ export const maquinasPesadas: Course = {
     {
       label: 'Carga horária',
       value: '40 horas',
-      desc: 'Teoria e prática nas 5 máquinas, em horários que cabem na sua rotina.',
+      desc: 'Teoria e prática nas 4 máquinas, em horários que cabem na sua rotina.',
     },
     {
       label: 'Modalidade',
@@ -181,7 +221,7 @@ export const maquinasPesadas: Course = {
     {
       label: 'Certificado',
       value: 'Imediato',
-      desc: 'Emitido na conclusão, válido em todo o Brasil, com as 5 máquinas discriminadas.',
+      desc: 'Emitido na conclusão, válido em todo o Brasil, com as 4 máquinas discriminadas.',
     },
     {
       label: 'Pré-requisitos',
@@ -191,10 +231,9 @@ export const maquinasPesadas: Course = {
   ],
   investimento: {
     intro:
-      'Curso de 2 máquinas, com material, horas de prática e certificado. Sem taxa escondida.',
-    preco: '3x de R$ 370,00',
-    precoDetalhe:
-      'ou R$ 990,00 à vista · valor para 2 máquinas. Consulte o valor para as 5 máquinas no WhatsApp.',
+      'Curso das 4 máquinas, com material, horas de prática e certificado. Sem taxa escondida.',
+    preco: 'R$ 1.420,00',
+    precoDetalhe: 'valor para as 4 máquinas · consulte o parcelamento no WhatsApp',
   },
   testimonials: [
     {
@@ -211,7 +250,7 @@ export const maquinasPesadas: Course = {
     },
     {
       quote:
-        'Fiz pensando no agro. Hoje opero pá carregadeira na cooperativa e ainda pego diária de rolo compactador no fim de semana.',
+        'Fiz pensando no agro. Hoje opero pá carregadeira na cooperativa e ainda pego diária de bobcat no fim de semana.',
       name: 'Marcos Antônio Ruas',
       role: 'Operador · Agroindústria',
     },
@@ -219,7 +258,7 @@ export const maquinasPesadas: Course = {
   faqs: [
     {
       q: 'O certificado é reconhecido?',
-      a: 'Sim. O certificado é emitido conforme as normas de segurança aplicáveis, com as 5 máquinas discriminadas, e é válido em todo o território nacional.',
+      a: 'Sim. O certificado é emitido conforme as normas de segurança aplicáveis, com as 4 máquinas discriminadas, e é válido em todo o território nacional.',
     },
     {
       q: 'Preciso ter experiência para fazer o curso?',
@@ -231,7 +270,11 @@ export const maquinasPesadas: Course = {
     },
     {
       q: 'Tem aula prática em todas as máquinas?',
-      a: 'Sim. Você pratica na retroescavadeira, pá carregadeira, escavadeira hidráulica, motoniveladora e rolo compactador, em ambiente controlado.',
+      a: 'Sim. Você pratica na retroescavadeira, pá carregadeira, escavadeira hidráulica e bobcat (mini carregadeira), em ambiente controlado.',
+    },
+    {
+      q: 'Posso fazer a inscrição pelo WhatsApp?',
+      a: 'Pode. Se preferir, chame a gente no WhatsApp que enviamos a ficha de inscrição por lá.',
     },
     {
       q: 'Preciso de CNH?',
@@ -242,6 +285,37 @@ export const maquinasPesadas: Course = {
       a: 'A boa prática do mercado é fazer a reciclagem periódica (em geral a cada 1 a 2 anos, conforme a política da empresa). Avisamos você quando for a hora.',
     },
   ],
+  galeria: {
+    kicker: 'Fotos reais',
+    titulo: 'Nossas turmas no campo',
+    fotos: [
+      { src: '/assets/turmas/maquinas-1.jpg', alt: 'Turma formada de operadores ao lado de escavadeira e retroescavadeira', w: 1600, h: 900 },
+      { src: '/assets/turmas/maquinas-2.jpg', alt: 'Aluno operando retroescavadeira no campo', w: 900, h: 1600 },
+      { src: '/assets/turmas/maquinas-3.jpg', alt: 'Aluno escavando com retroescavadeira durante a aula prática', w: 1600, h: 900 },
+      { src: '/assets/turmas/maquinas-4.jpg', alt: 'Aluno operando escavadeira hidráulica', w: 1600, h: 900 },
+      { src: '/assets/turmas/maquinas-5.jpg', alt: 'Aluno na retroescavadeira com as sapatas apoiadas', w: 900, h: 1600 },
+      { src: '/assets/turmas/maquinas-6.jpg', alt: 'Aluno operando a lança da retroescavadeira', w: 900, h: 1600 },
+      { src: '/assets/turmas/maquinas-7.jpg', alt: 'Instrutor explicando a operação para a turma no campo', w: 1600, h: 900 },
+    ],
+  },
+  blackFriday: {
+    selo: '70% de desconto',
+    prazo: 'Somente neste feriado · 19/11',
+    fim: '2026-11-19T23:59:59-03:00',
+    precoPor: 'R$ 1.420,00',
+    precoNota: 'as 4 máquinas · últimas 15 vagas',
+    lotes: [
+      { label: 'Lote 1 · 4 máquinas', preco: 'R$ 990,00', esgotado: true },
+      { label: 'Lote 2 · 4 máquinas', preco: 'R$ 1.230,00', esgotado: true },
+      { label: 'Lote atual · 4 máquinas', preco: 'R$ 1.420,00', nota: '15 vagas' },
+    ],
+    inclui: [
+      'Retroescavadeira',
+      'Pá carregadeira',
+      'Escavadeira hidráulica',
+      'Bobcat (mini carregadeira)',
+    ],
+  },
 };
 
 export const empilhadeira: Course = {
@@ -396,10 +470,35 @@ export const empilhadeira: Course = {
       a: 'Não. Para operar empilhadeira dentro de áreas privadas (galpões, pátios, indústrias) basta o certificado de treinamento conforme a NR-11.',
     },
     {
+      q: 'Posso fazer a inscrição pelo WhatsApp?',
+      a: 'Pode. Se preferir, chame a gente no WhatsApp que enviamos a ficha de inscrição por lá.',
+    },
+    {
       q: 'O certificado tem validade?',
       a: 'A boa prática do mercado é fazer a reciclagem periódica (em geral a cada 1 a 2 anos, conforme a política da empresa). Avisamos você quando for a hora.',
     },
   ],
+  galeria: {
+    kicker: 'Fotos reais',
+    titulo: 'Turmas formadas na empilhadeira',
+    fotos: [
+      { src: '/assets/turmas/empilhadeira-1.jpg', alt: 'Aluno formado segurando o certificado ao lado da empilhadeira', w: 1200, h: 1600 },
+      { src: '/assets/turmas/empilhadeira-2.jpg', alt: 'Aluno operando empilhadeira na aula prática', w: 1200, h: 1600 },
+      { src: '/assets/turmas/empilhadeira-3.jpg', alt: 'Aluno manobrando empilhadeira entre os cones', w: 1200, h: 1600 },
+      { src: '/assets/turmas/empilhadeira-4.jpg', alt: 'Turma formada com certificados em mãos', w: 1200, h: 1600 },
+      { src: '/assets/turmas/empilhadeira-5.jpg', alt: 'Aluno conduzindo a empilhadeira no pátio', w: 1200, h: 1600 },
+    ],
+  },
+  blackFriday: {
+    selo: '64% de desconto',
+    prazo: 'Somente em 27/11',
+    inicio: '2026-11-27T00:00:00-03:00',
+    fim: '2026-11-27T23:59:59-03:00',
+    precoDe: 'R$ 1.350,00',
+    precoPor: 'R$ 490,00',
+    precoNota: 'preço de Black Friday',
+    inclui: ['Certificado NR-11', 'Aulas práticas na máquina', 'Indicação ao mercado de trabalho'],
+  },
 };
 
 export const motoniveladora: Course = {
@@ -557,3 +656,8 @@ export const motoniveladora: Course = {
     },
   ],
 };
+
+/** Nomes de todos os cursos, para o campo "Nome do curso" da ficha. */
+export const NOMES_DOS_CURSOS = [maquinasPesadas, empilhadeira, motoniveladora].map(
+  (c) => c.courseName,
+);

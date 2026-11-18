@@ -1,5 +1,50 @@
-html {
-  scroll-behavior: smooth;
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Tokens do tema. As páginas usam var(--x); a Black Friday só troca os valores. */
+.tema {
+  --bg: #ffffff;
+  --bg-alt: #f3f5f8;
+  --card: #f3f5f8;
+  --card-alt: #ffffff;
+  --fg: #16181d;
+  --muted: #5b6472;
+  --text-body: #39414d;
+  --border: #e6e9ee;
+  --kicker: #1b4b9b;
+  --avatar-bg: #e6e9ee;
+  --avatar-fg: #5b6472;
+  --header-bg: #ffffff;
+  --dark: #16181d;
+  --dark-card: #1c2230;
+  --form-bg: linear-gradient(135deg, #1b4b9b, #12315f);
+}
+
+/* Black Friday: preto OLED, amarelo da marca como destaque, azul só no brilho. */
+.tema[data-bf] {
+  --bg: #0a0a0b;
+  --bg-alt: #121316;
+  --card: #17181c;
+  --card-alt: #17181c;
+  --fg: #f4f4f5;
+  --muted: #a1a1aa;
+  --text-body: #d4d4d8;
+  --border: #26272c;
+  --kicker: #ffb800;
+  --avatar-bg: #26272c;
+  --avatar-fg: #d4d4d8;
+  --header-bg: #000000;
+  --dark: #000000;
+  --dark-card: #141519;
+  --form-bg: radial-gradient(70% 60% at 50% 0%, rgba(255, 184, 0, 0.14), transparent 70%), #000000;
+}
+
+:focus-visible {
+  outline: 3px solid #ffb800;
+  outline-offset: 2px;
 }
 
 body {
@@ -37,14 +82,32 @@ input::placeholder {
   transition: background 0.15s ease;
 }
 .faq-q:hover {
-  background: #f3f5f8 !important;
+  background: var(--bg-alt) !important;
 }
 
 .input-field {
+  width: 100%;
+  min-height: 48px;
+  border: 1.5px solid #d4dae2;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font: 400 16px 'Barlow', sans-serif;
+  color: #16181d;
+  background: #ffffff;
+  outline: none;
   transition: border-color 0.15s ease;
+}
+.input-field[aria-invalid='true'] {
+  border-color: #d3382e;
+}
+
+.link-bf:hover {
+  text-decoration: underline;
+  text-decoration-color: #ffb800;
 }
 .input-field:focus {
   border-color: #1b4b9b !important;
+  box-shadow: 0 0 0 3px rgba(27, 75, 155, 0.25);
 }
 
 .social-link {
