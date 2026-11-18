@@ -51,12 +51,12 @@ export function Contagem({ bf, compacta = false }: { bf: BlackFriday; compacta?:
       className={compacta ? 'contagem contagem-compacta' : 'contagem'}
       role="timer"
       aria-label={r ? `${rotulo} ${t.dias} dias, ${t.horas} horas e ${t.min} minutos` : 'Contagem regressiva'}
-      style={{ display: 'flex', alignItems: 'center', gap: compacta ? 6 : 12, flexWrap: compacta ? 'nowrap' : 'wrap' }}
+      style={{ display: 'flex', alignItems: 'center', gap: compacta ? 10 : 12, flexWrap: compacta ? 'nowrap' : 'wrap' }}
     >
       <span
         className="contagem-rotulo"
         style={{
-          font: `700 ${compacta ? 12 : 15}px 'Barlow',sans-serif`,
+          font: `700 ${compacta ? 14 : 15}px 'Barlow',sans-serif`,
           letterSpacing: compacta ? 1 : 2,
           whiteSpace: 'nowrap',
           textTransform: 'uppercase',
@@ -65,7 +65,7 @@ export function Contagem({ bf, compacta = false }: { bf: BlackFriday; compacta?:
       >
         {rotulo}
       </span>
-      <div aria-hidden="true" className="contagem-blocos" style={{ display: 'flex', gap: compacta ? 4 : 10 }}>
+      <div aria-hidden="true" className="contagem-blocos" style={{ display: 'flex', gap: compacta ? 6 : 10 }}>
         {blocos.map(([valor, unidade]) => (
           <span
             key={unidade}
@@ -74,22 +74,22 @@ export function Contagem({ bf, compacta = false }: { bf: BlackFriday; compacta?:
               display: 'inline-flex',
               flexDirection: compacta ? 'row' : 'column',
               alignItems: compacta ? 'baseline' : 'center',
-              gap: compacta ? 2 : 6,
+              gap: compacta ? 3 : 6,
               background: compacta ? '#16171B' : 'linear-gradient(180deg,#1C1D22,#111114)',
-              border: compacta ? '1px solid #2A2B31' : '1.5px solid rgba(255,184,0,.45)',
+              border: compacta ? '1px solid rgba(255,184,0,.4)' : '1.5px solid rgba(255,184,0,.45)',
               borderRadius: compacta ? 8 : 14,
-              padding: compacta ? '3px 7px' : '14px 10px 12px',
+              padding: compacta ? '6px 11px' : '14px 10px 12px',
               minWidth: compacta ? undefined : 92,
               boxShadow: compacta ? undefined : '0 0 24px rgba(255,184,0,.12)',
               fontVariantNumeric: 'tabular-nums',
             }}
           >
-            <strong style={{ font: `800 ${compacta ? 17 : 56}px/1 'Barlow Condensed',sans-serif`, color: AMARELO }}>
+            <strong style={{ font: `800 ${compacta ? 30 : 56}px/1 'Barlow Condensed',sans-serif`, color: AMARELO }}>
               {valor}
             </strong>
             <small
               style={{
-                fontSize: compacta ? 11 : 13,
+                fontSize: 13,
                 color: '#A1A1AA',
                 fontWeight: 700,
                 textTransform: compacta ? undefined : 'uppercase',
@@ -152,7 +152,7 @@ export function BarraBlackFriday({ bf, onCta }: { bf: BlackFriday; onCta: () => 
         style={{
           maxWidth: 1140,
           margin: '0 auto',
-          padding: '6px 20px',
+          padding: '10px 20px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',

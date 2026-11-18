@@ -441,6 +441,24 @@ section[id] {
   .bf-barra-link {
     display: none !important;
   }
+  /* Relógio da faixa do topo: rótulo em cima, 4 blocos na largura toda. */
+  .contagem-compacta {
+    flex-direction: column;
+    gap: 6px !important;
+    width: 100%;
+  }
+  .contagem-compacta .contagem-blocos {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+  }
+  .contagem-compacta .contagem-box {
+    justify-content: center;
+    padding: 6px 4px !important;
+  }
+  .contagem-compacta .contagem-box strong {
+    font-size: 28px !important;
+  }
 
   /* Hero */
   .tema > section.hero {
