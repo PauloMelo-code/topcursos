@@ -7,6 +7,7 @@ import { waLink } from '@/lib/config';
 import { BarraBlackFriday, CardOferta, PrecoHero, SeloBlackFriday, useOfertaAtiva } from './BlackFriday';
 import InscricaoForm from './InscricaoForm';
 import Cabecalho from './Cabecalho';
+import BarraMobile from './BarraMobile';
 import {
   CredIcon,
   FacebookIcon,
@@ -68,6 +69,7 @@ export default function CoursePage({ course }: { course: Course }) {
 
       {/* HERO */}
       <section
+        className="hero"
         style={{
           background: bfOn
             ? 'radial-gradient(60% 70% at 85% 15%,rgba(255,184,0,.16),transparent 60%),radial-gradient(50% 60% at 0% 100%,rgba(27,75,155,.35),transparent 60%),#050505'
@@ -88,7 +90,7 @@ export default function CoursePage({ course }: { course: Course }) {
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             {bfOn ? (
-              <div>
+              <div className="hero-selo">
                 <SeloBlackFriday bf={bfOn} grande />
               </div>
             ) : (
@@ -111,16 +113,17 @@ export default function CoursePage({ course }: { course: Course }) {
             <h1
               style={{
                 margin: 0,
-                font: "800 clamp(36px,5.2vw,58px)/1.05 'Barlow Condensed',sans-serif",
+                font: "800 clamp(34px,5.2vw,58px)/1.05 'Barlow Condensed',sans-serif",
                 textTransform: 'uppercase',
                 letterSpacing: '.5px',
               }}
             >
               {course.hero.titlePre}
-              <span style={{ color: '#FFB800' }}>{course.hero.titleHighlight}</span>
+              <span style={{ color: '#FFB800', whiteSpace: 'nowrap' }}>{course.hero.titleHighlight}</span>
               {course.hero.titlePost}
             </h1>
             <p
+              className="hero-texto"
               style={{
                 margin: 0,
                 fontSize: 18,
@@ -133,7 +136,7 @@ export default function CoursePage({ course }: { course: Course }) {
             </p>
 
             {course.hero.chips && (
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              <div className="hero-chips" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                 {course.hero.chips.map((chip) => (
                   <span
                     key={chip}
@@ -154,7 +157,7 @@ export default function CoursePage({ course }: { course: Course }) {
 
             {bfOn && <PrecoHero bf={bfOn} />}
 
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 6 }}>
+            <div className="hero-ctas" style={{ display: 'flex', flexWrap: 'wrap', gap: 14, marginTop: 6 }}>
               <button
                 onClick={scrollToForm}
                 className="btn-yellow"
@@ -196,12 +199,13 @@ export default function CoursePage({ course }: { course: Course }) {
             </div>
           </div>
 
-          <div style={{ justifySelf: 'center', width: '100%', maxWidth: 520 }}>
+          <div className="hero-midia" style={{ justifySelf: 'center', width: '100%', maxWidth: 520 }}>
             {course.hero.image ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={course.hero.image.src}
                 alt={course.hero.image.alt}
+                className="hero-img"
                 style={{
                   display: 'block',
                   width: '100%',
@@ -237,7 +241,7 @@ export default function CoursePage({ course }: { course: Course }) {
       </section>
 
       {/* BARRA DE CREDIBILIDADE */}
-      <section style={{ background: '#FFB800', padding: '22px 20px' }}>
+      <section className="cred" style={{ background: '#FFB800', padding: '22px 20px' }}>
         <div
           style={{
             maxWidth: 1140,
@@ -250,6 +254,7 @@ export default function CoursePage({ course }: { course: Course }) {
           {course.credibility.map((item) => (
             <div
               key={item.text}
+              className="cred-item"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -464,6 +469,7 @@ export default function CoursePage({ course }: { course: Course }) {
             Como funciona o curso
           </h2>
           <div
+            className="steps-grid"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit,minmax(230px,1fr))',
@@ -473,6 +479,7 @@ export default function CoursePage({ course }: { course: Course }) {
             {course.steps.map((step) => (
               <div
                 key={step.label}
+                className="step-card"
                 style={{
                   background: 'var(--card-alt)',
                   borderRadius: 14,
@@ -493,7 +500,7 @@ export default function CoursePage({ course }: { course: Course }) {
                 >
                   {step.label}
                 </span>
-                <span style={{ font: "800 30px 'Barlow Condensed',sans-serif" }}>{step.value}</span>
+                <span className="step-valor" style={{ font: "800 30px 'Barlow Condensed',sans-serif" }}>{step.value}</span>
                 <p style={{ margin: 0, color: 'var(--muted)', lineHeight: 1.5 }}>{step.desc}</p>
               </div>
             ))}
@@ -587,15 +594,15 @@ export default function CoursePage({ course }: { course: Course }) {
               {course.galeria.titulo}
             </h2>
             {/* Linhas justificadas: cada foto cresce na proporção dela, sem cortar. */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
+            <div className="galeria" style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
               {course.galeria.fotos.map((foto) => (
-                <div key={foto.src} style={{ flex: `${foto.w / foto.h} 1 ${(foto.w / foto.h) * 200}px` }}>
+                <div key={foto.src} className="galeria-item" style={{ flex: `${foto.w / foto.h} 1 ${(foto.w / foto.h) * 200}px` }}>
                   <Image
                     src={foto.src}
                     alt={foto.alt}
                     width={foto.w}
                     height={foto.h}
-                    sizes="(max-width: 600px) 100vw, 50vw"
+                    sizes="(max-width: 640px) 80vw, 50vw"
                     style={{ display: 'block', width: '100%', height: 'auto', borderRadius: 12 }}
                   />
                 </div>
@@ -629,6 +636,7 @@ export default function CoursePage({ course }: { course: Course }) {
             Quem fez, recomenda
           </h2>
           <div
+            className="carrossel-movel"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))',
@@ -638,6 +646,7 @@ export default function CoursePage({ course }: { course: Course }) {
             {course.testimonials.map((t) => (
               <div
                 key={t.name}
+                className="depo-card"
                 style={{
                   background: 'var(--card-alt)',
                   borderRadius: 14,
@@ -744,7 +753,7 @@ export default function CoursePage({ course }: { course: Course }) {
       </section>
 
       {/* RODAPÉ */}
-      <footer style={{ background: 'var(--dark)', color: '#C9D2E0', padding: '56px 20px 90px' }}>
+      <footer className="rodape" style={{ background: 'var(--dark)', color: '#C9D2E0', padding: '56px 20px 90px' }}>
         <div
           style={{
             maxWidth: 1140,
@@ -900,6 +909,14 @@ export default function CoursePage({ course }: { course: Course }) {
           © 2026 Instituto Top. Todos os direitos reservados.
         </p>
       </footer>
+
+      {/* BARRA FIXA DO CELULAR (substitui o botão flutuante) */}
+      <BarraMobile
+        ctaTexto={bfOn ? `Garantir por ${bfOn.precoPor}` : 'Quero me inscrever'}
+        onCta={scrollToForm}
+        waHref={waInfo}
+        alvoId="inscricao"
+      />
 
       {/* BOTÃO FLUTUANTE WHATSAPP */}
       <a

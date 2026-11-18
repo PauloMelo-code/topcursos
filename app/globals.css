@@ -67,6 +67,13 @@ body {
   box-sizing: border-box;
 }
 
+/* Títulos quebram em linhas equilibradas (sem palavra órfã). */
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
 input::placeholder {
   color: #9aa3af;
 }
@@ -268,6 +275,74 @@ input::placeholder {
 section[id] {
   scroll-margin-top: 84px;
 }
+.menu-barra {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+.menu-cta {
+  background: #ffb800;
+  color: #16181d;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font: 700 15px 'Barlow', sans-serif;
+  cursor: pointer;
+  min-height: 44px;
+  white-space: nowrap;
+}
+.menu-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--fg);
+  cursor: pointer;
+}
+.menu-movel {
+  border-top: 1px solid var(--border);
+  padding: 8px 16px 18px;
+  background: var(--header-bg);
+}
+.menu-movel[hidden] {
+  display: none;
+}
+.menu-movel-link {
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+  padding: 0 4px;
+  border-bottom: 1px solid var(--border);
+  font: 700 18px 'Barlow', sans-serif;
+  color: var(--fg);
+  text-decoration: none;
+}
+.menu-movel-link[aria-current='true'] {
+  color: var(--kicker);
+}
+.menu-movel-wa {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  border-radius: 10px;
+  background: #25d366;
+  color: #ffffff;
+  font: 700 16px 'Barlow', sans-serif;
+  text-decoration: none;
+}
+.barra-mobile {
+  display: none;
+}
 .menu-links {
   display: flex;
 }
@@ -327,10 +402,324 @@ section[id] {
   .menu-links {
     display: none;
   }
+  .menu-toggle {
+    display: inline-flex;
+  }
 }
 @media (max-width: 640px) {
-  .menu-wa {
+  .menu-wa,
+  .menu-cta {
     display: none;
+  }
+}
+
+/* ===========================================================
+   MODO CELULAR (até 640px)
+   As seções usam estilo inline; aqui elas são reorganizadas
+   para o celular, por isso o !important.
+   =========================================================== */
+@media (max-width: 640px) {
+  /* Ritmo geral */
+  .tema > section {
+    padding: 48px 16px !important;
+  }
+  .tema > section > div > h2 {
+    margin-bottom: 24px !important;
+  }
+
+  /* Menu e barra da Black Friday */
+  .menu-barra {
+    padding: 8px 16px;
+    gap: 12px;
+  }
+  .menu-logo {
+    height: 44px !important;
+    width: 44px !important;
+    object-fit: contain;
+  }
+  .bf-barra-selo,
+  .bf-barra-link {
+    display: none !important;
+  }
+
+  /* Hero */
+  .tema > section.hero {
+    padding: 28px 16px 36px !important;
+  }
+  .hero > div {
+    gap: 28px !important;
+  }
+  .hero-selo > span > span {
+    font-size: 17px !important;
+    padding: 7px 12px !important;
+  }
+  .hero-texto {
+    font-size: 16px !important;
+  }
+  .hero-chips {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+  }
+  .hero-chips > span {
+    text-align: center;
+    font-size: 12.5px !important;
+    padding: 8px 6px !important;
+  }
+  .hero-ctas {
+    flex-direction: column;
+    gap: 10px !important;
+  }
+  .hero-ctas > * {
+    width: 100%;
+    justify-content: center;
+    min-height: 52px !important;
+  }
+  .hero-img {
+    height: 230px !important;
+  }
+
+  /* Faixa de credibilidade em 2x2 */
+  .tema > section.cred {
+    padding: 18px 16px !important;
+  }
+  .cred > div {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 16px 12px !important;
+  }
+  .cred-item {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 6px !important;
+    font-size: 13.5px !important;
+    line-height: 1.3;
+  }
+
+  /* O que você vai aprender: lista compacta (ícone à esquerda) */
+  #o-curso > div > div:first-child {
+    margin-bottom: 24px !important;
+  }
+  #o-curso ol {
+    gap: 12px !important;
+  }
+  .card-aprender {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    column-gap: 14px;
+    row-gap: 4px;
+    padding: 18px 16px;
+  }
+  .card-aprender-icone {
+    grid-row: 1 / span 2;
+    width: 48px;
+    height: 48px;
+  }
+  .card-aprender h3 {
+    margin: 0 !important;
+    padding-right: 40px;
+    font-size: 18px !important;
+    align-self: end;
+  }
+  .card-aprender p {
+    grid-column: 2;
+    font-size: 14.5px;
+  }
+  .card-aprender-num {
+    font-size: 34px;
+    top: 12px;
+    right: 14px;
+  }
+
+  /* Mercado de trabalho */
+  .secao-mercado > div {
+    gap: 28px !important;
+  }
+  .stat-destaque {
+    padding: 22px 18px;
+  }
+  .stat-card {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    column-gap: 14px;
+    row-gap: 2px;
+    padding: 16px;
+  }
+  .stat-card .stat-icone {
+    grid-row: 1 / span 2;
+  }
+  .stat-card > span:nth-child(2) {
+    font-size: 21px !important;
+    align-self: end;
+  }
+
+  /* Como funciona em 2x2 */
+  .steps-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+  }
+  .step-card {
+    padding: 16px 14px !important;
+  }
+  .step-valor {
+    font-size: 24px !important;
+  }
+  .step-card p {
+    font-size: 13.5px;
+  }
+
+  /* Card da oferta */
+  .card-oferta {
+    padding: 28px 16px !important;
+    gap: 18px !important;
+    border-radius: 16px !important;
+  }
+  .card-oferta .contagem {
+    flex-direction: column;
+    gap: 8px !important;
+  }
+  .contagem:not(.contagem-compacta) .contagem-box {
+    padding: 8px 10px !important;
+  }
+  .contagem:not(.contagem-compacta) .contagem-box strong {
+    font-size: 24px !important;
+  }
+  .lote {
+    padding: 12px 14px !important;
+  }
+  .lote-preco {
+    font-size: 30px !important;
+  }
+  .cta-oferta {
+    width: 100%;
+  }
+  .card-oferta h2 {
+    font-size: 26px !important;
+  }
+  /* O que está incluso: uma coluna alinhada, não centralizada. */
+  .card-oferta > ul:last-of-type {
+    flex-direction: column;
+    align-items: flex-start !important;
+    align-self: center;
+    gap: 10px !important;
+  }
+  .card-oferta > ul:last-of-type li {
+    text-align: left;
+  }
+  /* Preço dentro do card centralizado: sem a barra lateral. */
+  .card-oferta .preco-hero {
+    border-left: none !important;
+    padding-left: 0 !important;
+    align-items: center;
+  }
+
+  /* Galeria: carrossel de arrastar para o lado */
+  .galeria {
+    flex-wrap: nowrap !important;
+    gap: 10px !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin: 0 -16px;
+    padding: 0 16px 6px;
+    scroll-padding: 0 16px;
+    scrollbar-width: none;
+  }
+  .galeria::-webkit-scrollbar {
+    display: none;
+  }
+  .galeria-item {
+    flex: 0 0 auto !important;
+    scroll-snap-align: start;
+  }
+  .galeria-item img {
+    height: 300px !important;
+    width: auto !important;
+    max-width: 82vw;
+    object-fit: cover;
+  }
+
+  /* Depoimentos: carrossel */
+  .carrossel-movel {
+    display: flex !important;
+    gap: 12px !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    margin: 0 -16px;
+    padding: 0 16px 6px;
+    scroll-padding: 0 16px;
+    scrollbar-width: none;
+  }
+  .carrossel-movel::-webkit-scrollbar {
+    display: none;
+  }
+  .carrossel-movel > * {
+    flex: 0 0 84%;
+    scroll-snap-align: start;
+  }
+  .depo-card {
+    padding: 20px !important;
+  }
+
+  /* Ficha de inscrição */
+  .tema > section#inscricao {
+    padding: 40px 12px !important;
+  }
+  .ficha-card {
+    padding: 28px 16px !important;
+    border-radius: 16px !important;
+  }
+
+  /* Rodapé (espaço para a barra fixa) */
+  .rodape {
+    padding: 40px 16px 110px !important;
+  }
+  .rodape > div {
+    gap: 28px !important;
+  }
+  .rodape .social-link {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  /* Barra fixa de ação no rodapé da tela (substitui o botão flutuante) */
+  .wa-float {
+    display: none !important;
+  }
+  .barra-mobile {
+    display: flex;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 90;
+    gap: 10px;
+    padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+    background: rgba(10, 10, 11, 0.92);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    transition: transform 0.25s ease;
+  }
+  .barra-mobile[data-escondida] {
+    transform: translateY(110%);
+  }
+  .barra-mobile-wa {
+    flex: none;
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #25d366;
+  }
+  .barra-mobile-cta {
+    flex: 1;
+    min-height: 52px;
+    border: none;
+    border-radius: 12px;
+    background: #ffb800;
+    color: #16181d;
+    font: 800 17px 'Barlow', sans-serif;
+    cursor: pointer;
   }
 }
 
@@ -343,6 +732,7 @@ section[id] {
 }
 
 .phone-link {
+  min-height: 44px;
   transition: color 0.15s ease;
 }
 .phone-link:hover {

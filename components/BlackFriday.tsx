@@ -48,14 +48,17 @@ export function Contagem({ bf, compacta = false }: { bf: BlackFriday; compacta?:
 
   return (
     <div
+      className={compacta ? 'contagem contagem-compacta' : 'contagem'}
       role="timer"
       aria-label={r ? `${rotulo} ${t.dias} dias, ${t.horas} horas e ${t.min} minutos` : 'Contagem regressiva'}
-      style={{ display: 'flex', alignItems: 'center', gap: compacta ? 8 : 12, flexWrap: 'wrap' }}
+      style={{ display: 'flex', alignItems: 'center', gap: compacta ? 6 : 12, flexWrap: compacta ? 'nowrap' : 'wrap' }}
     >
       <span
+        className="contagem-rotulo"
         style={{
           font: `700 ${compacta ? 12 : 13}px 'Barlow',sans-serif`,
-          letterSpacing: 1.5,
+          letterSpacing: compacta ? 1 : 1.5,
+          whiteSpace: 'nowrap',
           textTransform: 'uppercase',
           color: '#D4D4D8',
         }}
@@ -66,6 +69,7 @@ export function Contagem({ bf, compacta = false }: { bf: BlackFriday; compacta?:
         {blocos.map(([valor, unidade]) => (
           <span
             key={unidade}
+            className="contagem-box"
             style={{
               display: 'inline-flex',
               alignItems: 'baseline',
@@ -135,18 +139,20 @@ export function BarraBlackFriday({ bf, onCta }: { bf: BlackFriday; onCta: () => 
         style={{
           maxWidth: 1140,
           margin: '0 auto',
-          padding: '8px 20px',
+          padding: '6px 20px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '8px 20px',
+          gap: '4px 20px',
           flexWrap: 'wrap',
         }}
       >
-        <SeloBlackFriday bf={bf} />
+        <span className="bf-barra-selo">
+          <SeloBlackFriday bf={bf} />
+        </span>
         <button
           onClick={onCta}
-          className="link-bf"
+          className="link-bf bf-barra-link"
           style={{
             background: 'none',
             border: 'none',
@@ -154,7 +160,7 @@ export function BarraBlackFriday({ bf, onCta }: { bf: BlackFriday; onCta: () => 
             font: "700 15px 'Barlow',sans-serif",
             cursor: 'pointer',
             padding: '6px 0',
-            minHeight: 32,
+            minHeight: 44,
           }}
         >
           {bf.prazo} · {bf.precoPor}
@@ -169,6 +175,7 @@ export function BarraBlackFriday({ bf, onCta }: { bf: BlackFriday; onCta: () => 
 export function PrecoHero({ bf }: { bf: BlackFriday }) {
   return (
     <div
+      className="preco-hero"
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -204,6 +211,7 @@ function Check() {
 export function CardOferta({ bf, onCta }: { bf: BlackFriday; onCta: () => void }) {
   return (
     <div
+      className="card-oferta"
       style={{
         maxWidth: 760,
         margin: '0 auto',
@@ -231,6 +239,7 @@ export function CardOferta({ bf, onCta }: { bf: BlackFriday; onCta: () => void }
           {bf.lotes.map((l) => (
             <li
               key={l.label}
+              className="lote"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -255,7 +264,7 @@ export function CardOferta({ bf, onCta }: { bf: BlackFriday; onCta: () => void }
                   </>
                 ) : (
                   <>
-                    <strong style={{ color: AMARELO, font: "800 clamp(30px,4vw,38px)/1 'Barlow Condensed',sans-serif" }}>{l.preco}</strong>
+                    <strong className="lote-preco" style={{ color: AMARELO, font: "800 clamp(30px,4vw,38px)/1 'Barlow Condensed',sans-serif", whiteSpace: 'nowrap' }}>{l.preco}</strong>
                     {l.nota && (
                       <span style={{ background: AMARELO, color: '#0A0A0B', font: "800 12px 'Barlow',sans-serif", letterSpacing: 1, padding: '4px 8px', borderRadius: 4, textTransform: 'uppercase' }}>
                         {l.nota}
@@ -282,7 +291,7 @@ export function CardOferta({ bf, onCta }: { bf: BlackFriday; onCta: () => void }
 
       <button
         onClick={onCta}
-        className="btn-yellow"
+        className="btn-yellow cta-oferta"
         style={{
           background: AMARELO,
           color: '#0A0A0B',

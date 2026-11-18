@@ -134,6 +134,7 @@ export default function InscricaoForm({ courseName }: { courseName: string }) {
 
   return (
     <div
+      className="ficha-card"
       style={{
         maxWidth: 680,
         margin: '0 auto',
