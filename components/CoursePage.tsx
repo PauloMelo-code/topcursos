@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { waLink } from '@/lib/config';
 import { BarraBlackFriday, CardOferta, PrecoHero, SeloBlackFriday, useOfertaAtiva } from './BlackFriday';
 import InscricaoForm from './InscricaoForm';
+import Cabecalho from './Cabecalho';
 import {
   CredIcon,
   FacebookIcon,
@@ -51,56 +52,19 @@ export default function CoursePage({ course }: { course: Course }) {
       {bfOn ? <BarraBlackFriday bf={bfOn} onCta={scrollToForm} /> : <div style={{ height: 8, background: STRIPES }} />}
 
       {/* HEADER */}
-      <header
-        style={{
-          background: 'var(--header-bg)',
-          borderBottom: '1px solid var(--border)',
-          position: 'sticky',
-          top: 0,
-          zIndex: 50,
-        }}
-      >
-        <div
-          style={{
-            maxWidth: 1140,
-            margin: '0 auto',
-            padding: '10px 20px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 16,
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/logo-instituto-top.png"
-            alt="Instituto Top, Treinamentos e Qualificação"
-            style={
-              bfOn
-                ? { height: 58, width: 58, objectFit: 'contain', background: '#fff', borderRadius: '50%', padding: 3 }
-                : { height: 64, width: 'auto' }
-            }
-          />
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <button
-              onClick={scrollToForm}
-              className="btn-yellow"
-              style={{
-                background: '#FFB800',
-                color: '#16181D',
-                border: 'none',
-                borderRadius: 8,
-                padding: '12px 20px',
-                font: "700 15px 'Barlow',sans-serif",
-                cursor: 'pointer',
-                minHeight: 44,
-              }}
-            >
-              Quero me inscrever
-            </button>
-          </div>
-        </div>
-      </header>
+      <Cabecalho
+        links={[
+          { id: 'o-curso', label: 'O curso' },
+          { id: 'como-funciona', label: 'Como funciona' },
+          { id: 'investimento', label: bfOn ? 'Oferta' : 'Investimento' },
+          ...(course.galeria ? [{ id: 'fotos', label: 'Fotos' }] : []),
+          { id: 'duvidas', label: 'Dúvidas' },
+        ]}
+        escuro={Boolean(bfOn)}
+        ctaTexto={bfOn ? `Garantir por ${bfOn.precoPor}` : 'Quero me inscrever'}
+        onCta={scrollToForm}
+        waHref={waInfo}
+      />
 
       {/* HERO */}
       <section
@@ -302,68 +266,74 @@ export default function CoursePage({ course }: { course: Course }) {
       </section>
 
       {/* O QUE VOCÊ VAI APRENDER */}
-      <section style={{ padding: '72px 20px', background: 'var(--bg)' }}>
+      <section id="o-curso" style={{ padding: '72px 20px', background: 'var(--bg)' }}>
         <div style={{ maxWidth: 1140, margin: '0 auto' }}>
-          <h2
-            style={{
-              margin: '0 0 8px',
-              font: "800 clamp(30px,3.8vw,42px)/1.1 'Barlow Condensed',sans-serif",
-              textTransform: 'uppercase',
-            }}
-          >
-            <span
-              style={{
-                display: 'block',
-                font: "700 13px 'Barlow',sans-serif",
-                letterSpacing: '2.5px',
-                color: 'var(--kicker)',
-                marginBottom: 10,
-              }}
-            >
-              Conteúdo do curso
-            </span>
-            O que você vai aprender
-          </h2>
-          <p style={{ margin: '0 0 36px', color: 'var(--muted)', fontSize: 17, maxWidth: 640 }}>
-            {course.learn.intro}
-          </p>
+          {/* Título à esquerda, chamada à direita (empilha no celular). */}
           <div
             style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              alignItems: 'flex-end',
+              justifyContent: 'space-between',
+              gap: '12px 40px',
+              marginBottom: 40,
+            }}
+          >
+            <h2
+              style={{
+                margin: 0,
+                font: "800 clamp(30px,3.8vw,42px)/1.1 'Barlow Condensed',sans-serif",
+                textTransform: 'uppercase',
+              }}
+            >
+              <span
+                style={{
+                  display: 'block',
+                  font: "700 13px 'Barlow',sans-serif",
+                  letterSpacing: '2.5px',
+                  color: 'var(--kicker)',
+                  marginBottom: 10,
+                }}
+              >
+                Conteúdo do curso
+              </span>
+              O que você vai aprender
+            </h2>
+            <p style={{ margin: 0, color: 'var(--muted)', fontSize: 17, lineHeight: 1.5, maxWidth: 420 }}>
+              {course.learn.intro}
+            </p>
+          </div>
+
+          <ol
+            style={{
+              listStyle: 'none',
+              margin: 0,
+              padding: 0,
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit,minmax(250px,1fr))',
               gap: 20,
             }}
           >
-            {course.learn.cards.map((card) => (
-              <div
-                key={card.title}
-                style={{
-                  background: 'var(--card)',
-                  borderRadius: 14,
-                  padding: 26,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 12,
-                }}
-              >
-                <span
-                  style={{
-                    width: 46,
-                    height: 46,
-                    borderRadius: 10,
-                    background: '#1B4B9B',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
+            {course.learn.cards.map((card, i) => (
+              <li key={card.title} className="card-aprender">
+                <span aria-hidden="true" className="card-aprender-num">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span className="card-aprender-icone">
                   <LearnIcon name={card.icon} />
                 </span>
-                <h3 style={{ margin: 0, font: "700 20px 'Barlow',sans-serif" }}>{card.title}</h3>
-                <p style={{ margin: 0, color: 'var(--muted)', lineHeight: 1.55 }}>{card.text}</p>
-              </div>
+                <h3 style={{ margin: '6px 0 0', font: "700 21px/1.2 'Barlow',sans-serif" }}>{card.title}</h3>
+                <p style={{ margin: 0, color: 'var(--muted)', lineHeight: 1.6 }}>{card.text}</p>
+              </li>
             ))}
-          </div>
+          </ol>
+
+          <p style={{ margin: '28px 0 0', textAlign: 'center', color: 'var(--muted)' }}>
+            Quer ver a grade completa?{' '}
+            <a href={waInfo} target="_blank" rel="noopener noreferrer" className="link-grade">
+              Peça pelo WhatsApp →
+            </a>
+          </p>
         </div>
       </section>
 
@@ -453,7 +423,7 @@ export default function CoursePage({ course }: { course: Course }) {
       </section>
 
       {/* COMO FUNCIONA */}
-      <section style={{ padding: '72px 20px', background: 'var(--bg-alt)' }}>
+      <section id="como-funciona" style={{ padding: '72px 20px', background: 'var(--bg-alt)' }}>
         <div style={{ maxWidth: 1140, margin: '0 auto' }}>
           <h2
             style={{
@@ -514,7 +484,7 @@ export default function CoursePage({ course }: { course: Course }) {
       </section>
 
       {/* INVESTIMENTO */}
-      <section style={{ padding: '72px 20px', background: 'var(--bg)' }}>
+      <section id="investimento" style={{ padding: '72px 20px', background: 'var(--bg)' }}>
         {bfOn ? (
           <CardOferta bf={bfOn} onCta={scrollToForm} />
         ) : (
@@ -576,7 +546,7 @@ export default function CoursePage({ course }: { course: Course }) {
 
       {/* GALERIA: fotos reais das turmas */}
       {course.galeria && (
-        <section style={{ padding: '72px 20px', background: 'var(--dark)', color: '#ffffff' }}>
+        <section id="fotos" style={{ padding: '72px 20px', background: 'var(--dark)', color: '#ffffff' }}>
           <div style={{ maxWidth: 1140, margin: '0 auto' }}>
             <h2
               style={{
@@ -696,7 +666,7 @@ export default function CoursePage({ course }: { course: Course }) {
       </section>
 
       {/* FAQ */}
-      <section style={{ padding: '72px 20px', background: 'var(--bg)' }}>
+      <section id="duvidas" style={{ padding: '72px 20px', background: 'var(--bg)' }}>
         <div style={{ maxWidth: 760, margin: '0 auto' }}>
           <h2
             style={{
@@ -751,7 +721,7 @@ export default function CoursePage({ course }: { course: Course }) {
       </section>
 
       {/* FORMULÁRIO */}
-      <section ref={formRef} style={{ padding: '72px 20px', background: 'var(--form-bg)' }}>
+      <section ref={formRef} id="inscricao" style={{ padding: '72px 20px', background: 'var(--form-bg)' }}>
         <InscricaoForm courseName={course.courseName} />
       </section>
 

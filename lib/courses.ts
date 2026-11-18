@@ -1,8 +1,10 @@
 // Dados de cada curso. As três páginas compartilham o mesmo template
 // (components/CoursePage.tsx); só muda o conteúdo definido aqui.
 
-export type CredIconKey = 'medal' | 'shield-check' | 'user' | 'truck';
-export type LearnIconKey = 'shield' | 'clipboard' | 'document' | 'truck';
+import type { IconKey } from '@/components/icons';
+
+export type CredIconKey = IconKey;
+export type LearnIconKey = IconKey;
 
 export interface Credibility {
   icon: CredIconKey;
@@ -146,14 +148,14 @@ export const maquinasPesadas: Course = {
     { icon: 'medal', text: 'Certificado válido em todo o Brasil' },
     { icon: 'shield-check', text: 'Treinamento conforme a NR-12' },
     { icon: 'user', text: 'Instrutores com anos de operação' },
-    { icon: 'truck', text: 'Prática em 4 máquinas' },
+    { icon: 'backhoe', text: 'Prática em 4 máquinas' },
   ],
   learn: {
     intro:
       'Do primeiro comando à manobra fina. Você sai daqui operando as 4 máquinas.',
     cards: [
       {
-        icon: 'shield',
+        icon: 'wheel',
         title: 'Operação segura',
         text: 'Comandos, manobras, escavação e carregamento com técnica e segurança.',
       },
@@ -163,12 +165,12 @@ export const maquinasPesadas: Course = {
         text: 'Checklist diário, sistemas hidráulicos, lubrificação e identificação de falhas antes de operar.',
       },
       {
-        icon: 'document',
+        icon: 'gavel',
         title: 'Legislação e normas',
         text: 'NR-12 e normas de segurança no canteiro, responsabilidades do operador e documentação.',
       },
       {
-        icon: 'truck',
+        icon: 'backhoe',
         title: 'Prática em campo',
         text: 'Horas de máquina nas 4 categorias, com instrutor ao lado, simulando situações reais de obra.',
       },
@@ -340,14 +342,14 @@ export const empilhadeira: Course = {
     { icon: 'medal', text: 'Certificado válido em todo o Brasil' },
     { icon: 'shield-check', text: 'Conforme a NR-11' },
     { icon: 'user', text: 'Instrutores com anos de operação' },
-    { icon: 'truck', text: 'Aulas práticas de verdade' },
+    { icon: 'forklift', text: 'Aulas práticas de verdade' },
   ],
   learn: {
     intro:
       'Nada de enrolação. Só o que você precisa dominar para operar bem e passar em qualquer avaliação de empresa.',
     cards: [
       {
-        icon: 'shield',
+        icon: 'wheel',
         title: 'Operação segura',
         text: 'Técnicas de condução, movimentação e empilhamento de cargas, estabilidade e prevenção de acidentes.',
       },
@@ -357,12 +359,12 @@ export const empilhadeira: Course = {
         text: 'Checklist diário, itens de segurança, manutenção preventiva e quando não operar a máquina.',
       },
       {
-        icon: 'document',
+        icon: 'gavel',
         title: 'Legislação e NR-11',
         text: 'O que a norma exige, responsabilidades do operador, sinalização e documentação obrigatória.',
       },
       {
-        icon: 'truck',
+        icon: 'forklift',
         title: 'Prática em campo',
         text: 'Manobras reais com empilhadeira, acompanhado de instrutor, em ambiente controlado.',
       },
@@ -523,14 +525,14 @@ export const motoniveladora: Course = {
     { icon: 'medal', text: 'Certificado válido em todo o Brasil' },
     { icon: 'shield-check', text: 'Treinamento conforme a NR-12' },
     { icon: 'user', text: 'Instrutores com anos de operação' },
-    { icon: 'truck', text: 'Horas de máquina de verdade' },
+    { icon: 'bulldozer', text: 'Horas de máquina de verdade' },
   ],
   learn: {
     intro:
       'Do primeiro comando ao acabamento fino de pista. A patrola exige técnica, e é isso que você vai dominar.',
     cards: [
       {
-        icon: 'shield',
+        icon: 'wheel',
         title: 'Operação e nivelamento',
         text: 'Comandos da lâmina, ângulos de corte, nivelamento de pista, abaulamento e acabamento fino.',
       },
@@ -540,12 +542,12 @@ export const motoniveladora: Course = {
         text: 'Checklist diário, sistema hidráulico, círculo e lâmina, lubrificação e quando não operar a máquina.',
       },
       {
-        icon: 'document',
+        icon: 'gavel',
         title: 'Legislação e normas',
         text: 'NR-12 e segurança no canteiro, sinalização, responsabilidades do operador e documentação.',
       },
       {
-        icon: 'truck',
+        icon: 'bulldozer',
         title: 'Prática em campo',
         text: 'Horas de patrola com instrutor ao lado, simulando serviços reais de estrada e canteiro.',
       },

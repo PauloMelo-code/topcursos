@@ -21,6 +21,10 @@
   --dark: #16181d;
   --dark-card: #1c2230;
   --form-bg: linear-gradient(135deg, #1b4b9b, #12315f);
+  --icon-bg: #1b4b9b;
+  --icon-fg: #ffffff;
+  --icon-borda: #1b4b9b;
+  --card-sombra: 0 14px 30px rgba(22, 24, 29, 0.1);
 }
 
 /* Black Friday: preto OLED, amarelo da marca como destaque, azul só no brilho. */
@@ -40,6 +44,10 @@
   --dark: #000000;
   --dark-card: #141519;
   --form-bg: radial-gradient(70% 60% at 50% 0%, rgba(255, 184, 0, 0.14), transparent 70%), #000000;
+  --icon-bg: rgba(255, 184, 0, 0.1);
+  --icon-fg: #ffb800;
+  --icon-borda: rgba(255, 184, 0, 0.35);
+  --card-sombra: 0 16px 36px rgba(0, 0, 0, 0.5);
 }
 
 :focus-visible {
@@ -108,6 +116,148 @@ input::placeholder {
 .input-field:focus {
   border-color: #1b4b9b !important;
   box-shadow: 0 0 0 3px rgba(27, 75, 155, 0.25);
+}
+
+/* Cards de "O que você vai aprender" */
+.card-aprender {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 28px 26px 30px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.card-aprender::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 3px;
+  background: #ffb800;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+.card-aprender:hover {
+  transform: translateY(-4px);
+  border-color: var(--icon-borda);
+  box-shadow: var(--card-sombra);
+}
+.card-aprender:hover::before {
+  transform: scaleX(1);
+}
+.card-aprender-num {
+  position: absolute;
+  top: 14px;
+  right: 20px;
+  font: 800 64px/1 'Barlow Condensed', sans-serif;
+  color: var(--kicker);
+  opacity: 0.14;
+  pointer-events: none;
+}
+.card-aprender-icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  background: var(--icon-bg);
+  color: var(--icon-fg);
+  border: 1px solid var(--icon-borda);
+}
+.link-grade {
+  color: var(--fg);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-color: #ffb800;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.link-grade:hover {
+  color: var(--kicker);
+}
+@media (prefers-reduced-motion: reduce) {
+  .card-aprender,
+  .card-aprender::before {
+    transition: none;
+  }
+  .card-aprender:hover {
+    transform: none;
+  }
+}
+
+/* Menu fixo do topo */
+section[id] {
+  scroll-margin-top: 84px;
+}
+.menu-links {
+  display: flex;
+}
+.menu-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 12px;
+  font: 600 15px 'Barlow', sans-serif;
+  color: var(--muted);
+  text-decoration: none;
+  border-radius: 8px;
+  position: relative;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.menu-link:hover {
+  color: var(--fg);
+  background: var(--bg-alt);
+}
+.menu-link[aria-current='true'] {
+  color: var(--fg);
+}
+.menu-link[aria-current='true']::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 6px;
+  height: 2px;
+  border-radius: 2px;
+  background: #ffb800;
+}
+.menu-wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 4px;
+  font: 700 15px 'Barlow', sans-serif;
+  color: var(--fg);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.15s ease;
+}
+.menu-wa svg {
+  color: #25d366;
+}
+.menu-wa:hover {
+  color: #25d366;
+}
+@media (max-width: 1100px) {
+  .menu-wa-num {
+    display: none;
+  }
+}
+@media (max-width: 900px) {
+  .menu-links {
+    display: none;
+  }
+}
+@media (max-width: 640px) {
+  .menu-wa {
+    display: none;
+  }
 }
 
 .social-link {
